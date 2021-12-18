@@ -2,8 +2,10 @@ import numpy as np
 import json
 
 #export input
-n = np.random.randint(4, 5)
-K = np.random.randint(3, 4)
+n = int(input('Number of n :'))
+K = int(input('Number of k :'))
+# n = 10
+# K = np.random.randint(3, 4)
 d = np.random.randint(1, 4, size=(n + 1))
 t = np.random.randint(1, 4, size=(n + 1, n + 1))
 d[0] = 0
