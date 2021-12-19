@@ -96,12 +96,13 @@ def cost(SOL):
 #SIMULATED ANNEALING
 
 #inital sol
-initial_sol = [[0], [0], [0]]
+initial_sol = [[0] for i in range(k)]
+print('INITIAL_SOL', initial_sol)
 #houses
 POS = [i for i in range(1, N)]
 #build initial sol:
 for i in POS:
-	j = np.random.randint(0, 3)
+	j = np.random.randint(0, k)
 	initial_sol[j].append(i)
 
 print(initial_sol)
@@ -113,7 +114,7 @@ print('COST', cost(initial_sol))
 
 T_init = 1500
 T_end = 1
-del_T = 1
+del_T = 3
 curr_sol = initial_sol
 
 while T_init > T_end:
