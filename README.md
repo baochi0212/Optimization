@@ -15,3 +15,4 @@ algo:
      -  greedy
      -  simulated annealing
      -  K-means + simulated annealing
+     -  genetic algorithm 
