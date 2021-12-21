@@ -1,15 +1,12 @@
-import numpy as np
-import random 
 import json
+import numpy as np
 from copy import deepcopy
+import math
+import random
+import argparse
 
-#READ INPUT:
-file = open('sample_input.json', 'r')
-input = json.load(file)
-N, k, d, t = input['n'], input['K'], input['d'], input['t']
-print('NUMBER OF HOUSES', N)
-print('NUMBER OF WORKERS', k)
-
+parser = argparse.ArgumentParser("INPUT")
+parser.add_argument('--input', type=str, default='sample_input1d.json')
 #sol has form [[1,2,3], [4,5,6], [7, 8, 9, 10]] add 0 after that
 #gen sol:
 def gen(N):
@@ -18,15 +15,17 @@ def gen(N):
 	#keep the divided perm:
 	out_sol = []
 	curr = []
-	initial = [i for i in range(N + 1)]
+	initial = [i for i in range(1, N + 1)]
 	#permute:
 	for i in range(int(N**0.5)):
-		m, n = np.random.randint(0, N + 1, size=2)
+		m, n = np.random.randint(0, N, size=2)
 		initial_ = deepcopy(initial)
+		print('INITIAL_', initial_)
+		print('M and N', m, n)
 		initial_[m], initial_[n] = initial_[n], initial_[m]
 		sol.append(initial_)
 
-	print('SOL', len(sol))
+		print('SOL', len(sol))
 	for s in sol:
 		for i in range(int(N**0.5)):
 			list = random.sample(range(1, N), k)
@@ -41,21 +40,15 @@ def gen(N):
 
 			out_sol.append(curr)
 			curr = []
-
-
-
-
-
-
-
 	return out_sol
+
 
 class Individual:
 	def __init__(self, chr):
 		#choromosome represents the solution seq:
 		self.chr = chr
 
-	#return the solution with simpler forms to handle
+		#return the solution with simpler forms to handle
 	def sol_cut(self):
 		sol_ = []
 		index = []
@@ -67,28 +60,6 @@ class Individual:
 
 
 		return sol_, index
-
-
-
-	# def mutated(self):
-	# 	#swap indexes in 2 random subsets:
-	# 	# i, j = np.random.randint(0, len(self.chr), size=2)
-	# 	# if i == j:
-	# 	# 	self.chr[i][0], self.chr[i][-1] = self.chr[i][-1], self.chr[i][0]
-	# 	# else:
-	# 	# 	self.chr[i][0], self.chr[j][-1] = self.chr[j][-1], self.chr[i][0]
-	# 	sol_, idx = self.sol_cut()
-	# 	i, j = np.random.randint(0, len(sol_), size=2)
-	# 	if i == j:
-	# 		i = 1
-	# 		j = len(sol_) - 1
-	# 	sol_[i], sol_[j] = sol_[j], sol_[i]
-	# 	#make the mutated chr:
-	# 	chr = []
-	# 	for x, y in idx:
-	# 		chr.append(sol_[x:y+1])
-	# 	return chr
-
 
 	def cross_over(self, par2):
 		#prob for mutate or take par1 or take par2
@@ -150,9 +121,11 @@ class Individual:
 		list = []
 		for sol in self.chr:
 			count = 0
-			sol_ = deepcopy(sol)
+			sol_ = [0]
+			sol_.extend(sol)
 			sol_.append(0)
 			for i in range(len(sol_) - 1):
+				# print(f'{sol_[i]}->{sol_[i + 1]}')
 				x = sol_[i]
 				y = sol_[i + 1]
 				count += t[x][y] + d[y]
@@ -170,8 +143,8 @@ class Population:
 		#convert population to class individual:
 		for i in range(len(self.population)):
 					self.population[i] = Individual(self.population[i])
-		
-		
+			
+			
 		converge = False
 		while converge == False:
 			print('CONVERGE', converge)
@@ -190,8 +163,8 @@ class Population:
 			#take pars in 50% rest
 			rest = 8*n//10
 			for _ in range(rest):
-					par1 = random.choice(self.population[:50])
-					par2 = random.choice(self.population[:50])
+					par1 = random.choice(self.population[:30])
+					par2 = random.choice(self.population[:30])
 					child = par1.cross_over(par2)
 					temp.append(Individual(child))
 			self.generation += 1
@@ -200,14 +173,41 @@ class Population:
 			self.population = temp
 
 
-		return self.population[0].cost(), len(self.population[0].chr)
+		return self.population[0].cost(), self.population[0].chr
+
+
+
 
 
 
 
 if __name__ == '__main__':
+	args = parser.parse_args()
+	name = args.input
+
+
+
+	#READ INPUT:
+	with open(name, 'r') as f:
+		input = json.load(f)
+	N, k, d, t = input['N'], input['k'], input['d'], input['t']
+	print('NUMBER OF HOUSES', N)
+	print('NUMBER OF WORKERS', k)
+
+	#MAIN
 	old = Individual([[1,2,3], [4,5,6,7], [8, 9]])
 	new = Individual([[2, 1], [5,3,7], [4, 6, 8, 9]])
 	pop = Population(N)
-	print('RESULT', pop.main())
+	optim, SOL = pop.main()
+	for i, sol_ in enumerate(SOL):
+		print(f'WORKER {i}')
+		sol = [0]
+		sol.extend(sol_)
+		sol.append(0)
+		for idx in range(len(sol) - 1):
+			print(f'move from {sol[idx]} to {sol[idx + 1]} with cost {t[sol[idx]][sol[idx + 1]]} and work for {d[sol[idx + 1]]}')
+		print('COST', Individual([sol]).cost())
+		print('>>>>>>>>>>>>>>>>>>..')
+	print('Z', optim)
+
 

@@ -3,15 +3,10 @@ import numpy as np
 from copy import deepcopy
 import math
 import random
+import argparse
 
-
-#READ INPUT:
-file = open('sample_input.json', 'r')
-input = json.load(file)
-N, k, d, t = input['n'], input['K'], input['d'], input['t']
-print('NUMBER OF HOUSES', N)
-print('NUMBER OF WORKERS', k)
-
+parser = argparse.ArgumentParser("INPUT")
+parser.add_argument('--input', type=str, default='sample_input1d.json')
 def get_max(SOL):
 	max = [0, 0]
 	min = [9999, 0]
@@ -21,9 +16,6 @@ def get_max(SOL):
 		if len(SOL[i]) < min[0]:
 			min = [len(SOL[i]), i]
 	return max, min
-
-
-
 
 # neigbors generation 
 def gen_neighbors(SOL):
@@ -62,16 +54,6 @@ def gen_neighbors(SOL):
 				else:
 					SOL2_[i][a], SOL2_[i][b] = SOL2_[i][b], SOL2_[i][a]
 					neighbors.append(SOL2_)
-
-	return neighbors
-
-		
-
-
-
-
-
-
 	return neighbors
 
 def cost(SOL):
@@ -91,63 +73,79 @@ def cost(SOL):
 
 
 
-	
 
-#SIMULATED ANNEALING
-
-#inital sol
-initial_sol = [[0] for i in range(k)]
-print('INITIAL_SOL', initial_sol)
-#houses
-POS = [i for i in range(1, N)]
-#build initial sol:
-for i in POS:
-	j = np.random.randint(0, k)
-	initial_sol[j].append(i)
-
-print(initial_sol)
-
-print('NEIGHBORS', gen_neighbors(initial_sol)[-1])
-# print('T', t, len(t), len(t[0]))
-print('COST', cost(initial_sol))
-
-
-T_init = 1500
-T_end = 1
-del_T = 3
-curr_sol = initial_sol
-
-while T_init > T_end:
-	print(T_init)
-	print('CURR', curr_sol)
-	neighbor_list = gen_neighbors(curr_sol)
-	idx = np.random.randint(len(neighbor_list))
-	candi = neighbor_list[idx]
-	#acceptance rule:
-	if cost(candi) > cost(curr_sol) and math.exp(-(cost(candi) - cost(curr_sol))/T_init) > random.uniform(0, 1):
-		curr_sol = candi
-	if cost(candi)  < cost(curr_sol):
-		curr_sol = candi
-
-	#decrement:
-	T_init -= del_T
+if __name__ == '__main__':
+	args = parser.parse_args()
+	name = args.input
 
 
 
-print('SOL', curr_sol)
-print('Z', cost(curr_sol))
-print('SOLUTION')
+	#READ INPUT:
+	with open(name, 'r') as f:
+		input = json.load(f)
+	N, k, d, t = input['N'], input['k'], input['d'], input['t']
+	print('NUMBER OF HOUSES', N)
+	print('NUMBER OF WORKERS', k)
 
-solution = curr_sol
 
-solution = curr_sol
 
-for sol in solution:
-	print('WORKER')
-	sol.append(0)
-	for idx in range(len(sol) - 1):
-		print(f'move from {sol[idx]} to {sol[idx + 1]} with cost{t[sol[idx]][sol[idx + 1]]} and work for {d[sol[idx + 1]]}')
-	print('>>>>>>>>>>>>>>>>>>..')
+	#MAIN
+	#SIMULATED ANNEALING
+
+	#inital sol
+	initial_sol = [[0] for i in range(k)]
+	print('INITIAL_SOL', initial_sol)
+	#houses
+	POS = [i for i in range(1, N)]
+	#build initial sol:
+	for i in POS:
+		j = np.random.randint(0, k)
+		initial_sol[j].append(i)
+
+	print(initial_sol)
+
+	print('NEIGHBORS', gen_neighbors(initial_sol)[-1])
+	# print('T', t, len(t), len(t[0]))
+	print('COST', cost(initial_sol))
+
+
+	T_init = 1500
+	T_end = 1
+	del_T = 3
+	curr_sol = initial_sol
+
+	while T_init > T_end:
+		print('Temperature', T_init)
+		print('OPT', cost(curr_sol))
+		neighbor_list = gen_neighbors(curr_sol)
+		idx = np.random.randint(len(neighbor_list))
+		candi = neighbor_list[idx]
+		#acceptance rule:
+		if cost(candi) > cost(curr_sol) and math.exp(-(cost(candi) - cost(curr_sol))/T_init) > random.uniform(0, 1):
+			curr_sol = candi
+		if cost(candi)  < cost(curr_sol):
+			curr_sol = candi
+
+		#decrement:
+		T_init = T_init - 3
+
+
+
+	print('SOL', curr_sol)
+
+	solution = curr_sol
+
+
+	for i, sol in enumerate(solution):
+		print(f'WORKER {i}')
+		sol.append(0)
+		for idx in range(len(sol) - 1):
+			print(f'move from {sol[idx]} to {sol[idx + 1]} with cost{t[sol[idx]][sol[idx + 1]]} and work for {d[sol[idx + 1]]}')
+		print("COST", cost([sol]))
+		print('>>>>>>>>>>>>>>>>>>..')
+
+	print('Z', cost(solution))
+	print('SOLUTION')
 
 
 
