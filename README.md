@@ -15,12 +15,14 @@ usage:
   
   
 algo:
+  -  IP (ORtools)
   -  CP model (ORtools)
   -  heuristic:
      -  greedy
      -  simulated annealing
      -  K-means + simulated annealing
      -  genetic algorithm
+     -  hill climbing
 
 dataset:
   - sample0.json: N = 6, k = 3 
