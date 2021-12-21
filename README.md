@@ -1,8 +1,5 @@
 set up:
-<<<<<<< HEAD
   - install conda -> conda create -n yourenv python=3.9 -> conda activate yourenv (recommended)
-=======
->>>>>>> 4fb4797a8834347aaa32ec5fb7330ae57494318b
   - git clone https://github.com/baochi0212/Optimization
   -  pip install -r requirements.txt
   
