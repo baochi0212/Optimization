@@ -2,15 +2,18 @@ set up:
   - install conda -> conda create -n yourenv python=3.9 -> conda activate yourenv (recommended)
   - git clone https://github.com/baochi0212/Optimization
   -  pip install -r requirements.txt
+  -  Colab on browser 
   
   
   
 usage:
+- python files running local
   - cd Optimization 
   - python gen_input.py
   - python youralgo.py --input filename.json
   - python gen_input.py
   - python main.py
+- Colab: use 2 colab files added in repo
 
   
   
