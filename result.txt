@@ -1,0 +1,45 @@
+		Ortools		greedy 	SA 		genetic_algo 	hill_climbing	IP 	SA(better tuned) TS_LNS
+
+sample0: N = 6, k = 3	
+	result	18		26		20		21		18			18			18 		18 			18
+	time	172.27	0.01	0.057	0.005	0.051		0.49		0.53 	0.49		0.013
+	(s)
+
+sample0.5: N = 18, k = 3 (test the limit of IP)
+	result	None	74 		55		59				55				41		53 			43
+	time	None	0.003	0.03	0.01			0.08			137.65	0.60 		0.126
+	(s)
+
+sample1: N = 99, k = 9
+	result 	None	372		329		368				317				None	314			314 			
+	time	None	0.01	0.17	0.09			1.06			None	1.56        22.32
+	(s)	
+
+sample1.5: small k = 3
+	result	None 	831				756												 	456
+	time 	None	0.07			0.16 												8.358
+	(s)
+
+sample2:   N = 999, k = 99:
+	result	None	350														410			286
+	time 	None    1.41 													13.26       2366
+	(s)
+
+sample2.5: N = 9999, k = 9
+	result	None 	162761 	27662 	
+	time	None    23.46	485.16 
+	(s)
+	
+sample3: 	N = 9999, k = 99 
+	result:		2679														3130
+	time:		33															160
+	(s)
+
+							Clustering SA 			SA (well tuned)		
+sample2d N = 535, k = 3 
+	result  					183,38 				105,93
+		
+
+-> tradeoff between time and accuracy (TS_LNS, IP vs other heuristics)
+-> greedy tends to outperform in dataset with ratio n/k small and vice versa (sample1.5 vs sample1, sample2.5 vs sample3)
+-> tuned algorithms works better (tuned hill climbing even better than SA)
