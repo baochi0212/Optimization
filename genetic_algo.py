@@ -4,6 +4,8 @@ from copy import deepcopy
 import math
 import random
 import argparse
+import time
+
 
 parser = argparse.ArgumentParser("INPUT")
 parser.add_argument('--input', type=str, default='sample_input1d.json')
@@ -20,15 +22,15 @@ def gen(N):
 	for i in range(int(N**0.5)):
 		m, n = np.random.randint(0, N, size=2)
 		initial_ = deepcopy(initial)
-		print('INITIAL_', initial_)
-		print('M and N', m, n)
+		# print('INITIAL_', initial_)
+		# print('M and N', m, n)
 		initial_[m], initial_[n] = initial_[n], initial_[m]
 		sol.append(initial_)
 
 		print('SOL', len(sol))
 	for s in sol:
 		for i in range(int(N**0.5)):
-			list = random.sample(range(1, N), k)
+			list = random.sample(range(1, N), k - 1)
 			list = sorted(list, key=lambda x: x)
 			for j in range(len(list)):
 				if j == 0:
@@ -182,6 +184,7 @@ class Population:
 
 
 if __name__ == '__main__':
+	start = time.time()
 	args = parser.parse_args()
 	name = args.input
 
@@ -209,5 +212,5 @@ if __name__ == '__main__':
 		print('COST', Individual([sol]).cost())
 		print('>>>>>>>>>>>>>>>>>>..')
 	print('Z', optim)
-
+	print('elapsed', time.time() - start)
 

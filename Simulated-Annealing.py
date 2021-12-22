@@ -3,6 +3,8 @@ import random
 from copy import deepcopy
 import json
 import argparse
+import time
+
 
 parser = argparse.ArgumentParser("INPUT")
 parser.add_argument('--input', type=str, default='sample0.json')
@@ -10,6 +12,7 @@ parser.add_argument('--input', type=str, default='sample0.json')
 args = parser.parse_args()
 name = args.input
 
+start = time.time()
 with open(name, 'r') as f:
     input = json.load(f)
     n, k, d, t = input['N'], input['k'], input['d'], input['t']
@@ -53,7 +56,7 @@ for i in range(1, n + 1):
 goal = cost(W)
 
 W_tmp = deepcopy(W)
-iter = 50000
+iter = 10000
 while iter > 0:
     W_neighbour = neighbour(W_tmp)
     tmp = cost(W_neighbour)
@@ -68,3 +71,5 @@ while iter > 0:
 
 print(goal)
 print(W)
+
+print('elapsed', time.time() - start)

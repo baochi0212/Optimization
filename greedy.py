@@ -4,6 +4,8 @@ from copy import deepcopy
 import math
 import random
 import argparse
+import time
+
 
 parser = argparse.ArgumentParser("INPUT")
 parser.add_argument('--input', type=str, default='sample_input1d.json')
@@ -33,6 +35,7 @@ def curr_load(SOL):
 
 
 if __name__ == '__main__':
+	start = time.time()
 	args = parser.parse_args()
 	name = args.input
 
@@ -100,7 +103,6 @@ if __name__ == '__main__':
 	for i in range(len(SOL)):
 		SOL[i].append(0)
 		loads.append(curr_load(SOL[i]))
-
 	for i, sol in enumerate(SOL):
 		print(f'WORKER {i}')
 		for idx in range(len(sol) - 1):
@@ -109,6 +111,8 @@ if __name__ == '__main__':
 
 	print('SOLVED', SOL)
 	print('FOUND Z', max(loads))
+
+	print('ELAPSED', time.time() - start)
 
 
 

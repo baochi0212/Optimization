@@ -3,7 +3,9 @@ from copy import deepcopy
 from heapq import nsmallest
 import json
 import argparse
+import time
 
+start = time.time()
 parser = argparse.ArgumentParser("INPUT")
 parser.add_argument('--input', type=str, default='sample0.json')
 
@@ -85,3 +87,4 @@ while iter > 0:
 
 print(goal)
 print(W)
+print('elapsed', time.time() - start)

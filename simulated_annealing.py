@@ -4,6 +4,7 @@ from copy import deepcopy
 import math
 import random
 import argparse
+import time
 
 parser = argparse.ArgumentParser("INPUT")
 parser.add_argument('--input', type=str, default='sample_input1d.json')
@@ -75,6 +76,7 @@ def cost(SOL):
 
 
 if __name__ == '__main__':
+	start = time.time()
 	args = parser.parse_args()
 	name = args.input
 
@@ -96,7 +98,7 @@ if __name__ == '__main__':
 	initial_sol = [[0] for i in range(k)]
 	print('INITIAL_SOL', initial_sol)
 	#houses
-	POS = [i for i in range(1, N)]
+	POS = [i for i in range(1, N + 1)]
 	#build initial sol:
 	for i in POS:
 		j = np.random.randint(0, k)
@@ -109,9 +111,9 @@ if __name__ == '__main__':
 	print('COST', cost(initial_sol))
 
 
-	T_init = 1500
+	T_init = 3333
 	T_end = 1
-	del_T = 3
+	del_T = 0.8
 	curr_sol = initial_sol
 
 	while T_init > T_end:
@@ -127,7 +129,7 @@ if __name__ == '__main__':
 			curr_sol = candi
 
 		#decrement:
-		T_init = T_init - 3
+		T_init = int(T_init*del_T)
 
 
 
@@ -146,6 +148,7 @@ if __name__ == '__main__':
 
 	print('Z', cost(solution))
 	print('SOLUTION')
+	print('elapsed', time.time() - start)
 
 
 
