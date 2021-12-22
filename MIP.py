@@ -4,6 +4,7 @@ from copy import deepcopy
 import math
 import random
 import argparse
+import time
 from ortools.linear_solver import pywraplp
 
 parser = argparse.ArgumentParser("INPUT")
@@ -12,6 +13,7 @@ parser.add_argument('--input', type=str, default='sample_input1d.json')
 
 
 if __name__ == '__main__':
+	start = time.time()
 	args = parser.parse_args()
 	name = args.input
 
@@ -196,6 +198,7 @@ if __name__ == '__main__':
 
 	#get the minimum of maximum 
 	print('MINIMUM OF MAXIMUM', obj.Value())
+	print('elapsed', time.time() - start)
 
 
 

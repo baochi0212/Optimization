@@ -1,6 +1,8 @@
 from ortools.linear_solver import pywraplp
 import json
 import argparse
+import time
+
 
 parser = argparse.ArgumentParser("INPUT")
 parser.add_argument('--input', type=str, default='sample0.json')
@@ -8,6 +10,7 @@ parser.add_argument('--input', type=str, default='sample0.json')
 args = parser.parse_args()
 name = args.input
 
+start = time.time()
 with open(name, 'r') as f:
     input = json.load(f)
     n, k, d, t = input['N'], input['k'], input['d'], input['t']
@@ -84,3 +87,6 @@ for i in range(0, k):
     print('K{}'.format(i))
     for ii in range(0, n + 1):
         print([x[i][ii][iii].solution_value() for iii in range(0, n + 1)])
+
+
+print('elapsed', time.time() - start)
